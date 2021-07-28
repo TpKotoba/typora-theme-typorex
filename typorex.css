@@ -1,0 +1,634 @@
+/* ======== 寫在前面 ======== */
+/* 這份佈景主題 fork 自 Github 上 @Keldos-Li 所發佈的「Typora伪装LaTeX中文样式主题 typora-latex-theme」項目，
+將其修改成易於臺灣學生使用的版本，並依照個人喜好將字體部份進行統一，整個版面看起來清新得多。
+*/
+
+/* ======== 正文開始 ======== */
+
+@import "./typorex/ComputerModern/ComputerModern.css";
+@import "./typorex/ComputerModernTypewriter/ComputerModernTypewriter.css";
+@import "./typorex/GenRyuMin/GenryuMin.css";
+
+/* ==== 個人化設置 ==== */
+:root {
+	/* == 中英字體 == */
+	/* 中文部份是採用開源的「源流明體」：https://github.com/ButTaiwan/genryu-font；
+	英文則是採用 TeX 系統原生的「ComputerModern」，由 Christian Perfect 編譯：https://www.checkmyworking.com/cm-web-fonts/。
+	*/
+	--base-font: "Computer Modern", "GenRyuMin", serif;
+	--heading-font: var(--base-font);
+	--quote-font: var(--base-font);
+	--table-title-font: var(--base-font);
+	--table-font: var(--base-font);
+	--toc-font: var(--base-font);
+	--ui-font: var(--base-font);
+
+	--code-font: "Computer Modern Typewriter", "GenRyuMin", monospace;	
+	--sourceMode-font: var(--code-font);
+
+	/* == 字體大小 == */
+	/* 這裡的大小比例恰巧對應至宮商角徵羽；
+	「……九九八十一以為宮。
+	三分去一，五十四以為徵。
+	三分益一，七十二以為商。
+	三分去一，四十八以為羽。
+	三分益一，六十四以為角。」
+	──《史記》「律書第三」，司馬遷
+	*/
+	--h1-font-size: 2rem;
+	--h2-font-size: 1.6875rem; /* 這個數字是 81/48 */
+	--h3-font-size: 1.5rem; /* 這個數字是 81/54 */
+	--h4-font-size: 1.265625rem; /* 這個數字是 81/64 */
+	--h5-font-size: 1.111rem; /* 這個數字是 81/72 */
+	--h6-font-size: 1rem;
+
+	/* == 行距 == */
+	/* 內文我沒有調，直接預設
+	*/
+	--title-height-rate: 1.5;
+
+	/* == 顏色 == */
+	/* 這裡的顏色取自「NIPPON COLORS 日本の伝統色」：https://nipponcolors.com。
+	*/
+	--aimirucha    : #0f4c3a;
+	--fujisusutake : #574c57;
+	--taikoh       : #F8C3CD;
+	--usuki        : #FAD689;
+	--kamenozoki   : #A5DEE4;
+
+	--anchor-color: var(--aimirucha);
+	--bg-color: white;
+	--mark-color: #fad6899f;
+	--numbering-color: black;
+	--quote-bar-color: var(--usuki);
+	--quote-color: var(--fujisusutake);
+	--ui-color: #f3f3ee;
+
+	/* ==== 控制項 ==== */
+	--toc-show-title: none; 
+	--toc-show-h5h6: none;
+    --h2-show-enum: ;
+	--h3-show-enum: ;
+	--h4-show-enum: ;
+	--h5-show-enum: none;
+    --h6-show-enum: none;
+}
+
+
+/* ==== 版面與輸出 ==== */
+/* 編輯器的整體外觀與 PDF 輸出的額外設定。
+*/
+@media screen {
+    #write {
+        padding: 12mm 18mm 12mm 18mm !important;
+        box-shadow: 0 0 24px 12px #dddddd;
+    }
+}
+
+@media print {
+    #write a {
+        color: inherit;
+        /*text-decoration: none; /* 把超連結的格式去除；僅限影印時使用 */
+    }
+    @page {
+        padding: 2cm 2cm 2cm 2cm !important;
+    }
+}
+
+
+/* ==== 編輯器環境設定 ==== */
+html, content {
+    background-color: var(--ui-color);
+}
+
+/* 編輯區 */
+#write {
+    max-width: 210mm;
+    background-color: var(--bg-color);
+
+    font-family: var(--base-font);
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+#write p {
+    font-weight: normal;
+    text-align: justify;
+}
+
+
+/* Source Mode */
+#typora-source {
+    font-family: var(--sourceMode-font);
+}
+
+/* YAML */
+#write pre.md-meta-block {
+    margin: 2rem;
+    padding: 1rem;
+}
+
+#write pre.md-fences {
+    padding: 1rem 0px;
+    margin: 2rem 0px;
+}
+
+#write pre.md-meta-block,
+#write pre.md-fences {
+    font-family: var(--code-font);
+    line-height: 1.2rem;
+    background-color: var(--ui-color);
+    border-radius: .5rem;
+    /*box-shadow: 0 0 1px 1px var(--quote-color);*/
+}
+
+blockquote {
+    font-style: normal;
+    font-family: var(--quote-font);
+    font-size: var(--quote-font-size);
+
+    border-left: 3px solid var(--quote-bar-color);
+    padding-left: .5rem;
+    padding-right: .5rem;
+    margin-left: 1rem;
+    color: var(--quote-color);
+}
+
+#write h1, 
+#write h2, 
+#write h3, 
+#write h4, 
+#write h5, 
+#write h6 {
+    font-weight: 700;
+    font-family: var(--heading-font);
+    page-break-after: avoid !important;
+}
+
+/* Consecutive headings with deepening level should not be split across pages:
+*/
+h1+h2, h2+h3, h3+h4, h4+h5, h5+h6 {
+    page-break-before: avoid;
+}
+
+/* 下面的換頁防護設定來自：https://kakadodo.github.io/2018/03/13/css-media-print-setting/
+*/
+h1, h2, h3, h4, h5, h6 {
+    page-break-after:avoid;
+    page-break-inside:avoid
+}
+h1+p, h2+p, h3+p {
+    page-break-before: avoid;
+}
+a {
+    page-break-inside:avoid
+}
+img {
+    page-break-after: avoid;
+    page-break-inside: avoid;
+}
+table, blockquote {
+    page-break-inside: avoid;
+}
+ul, ol {
+    page-break-before:avoid;
+}
+
+#write h1 {
+    text-align: center;
+    font-size: var(--h1-font-size);
+    line-height: calc(var(--title-height-rate)*var(--h1-font-size));
+    column-span: all; /* 這個屬性是為了多欄做準備吧 */
+}
+#write h2 {
+    font-size: var(--h2-font-size);
+    line-height: calc(var(--title-height-rate)*var(--h2-font-size));
+    page-break-before: right;
+}
+#write h3 {
+    font-size: var(--h3-font-size);
+    line-height: calc(var(--title-height-rate)*var(--h3-font-size));
+}
+#write h4 {
+    font-size: var(--h4-font-size);
+    line-height: calc(var(--title-height-rate)*var(--h4-font-size));
+}
+#write h5 {
+    font-size: var(--h5-font-size);
+    line-height: calc(var(--title-height-rate)*var(--h5-font-size));
+}
+#write h6 {
+    font-size: var(--h6-font-size);
+    line-height: calc(var(--title-height-rate)*var(--h6-font-size));
+}
+
+hr {
+    border-top: solid 0.7px #EEE;
+}
+
+#write table, 
+#write img {
+    page-break-inside: avoid;
+}
+
+#write table {
+    border-top: 1.2pt solid;
+    border-bottom: 1.2pt solid;
+    font-family: var(--table-font);
+    /*border-spacing: 6px;*/
+    width: auto;
+    margin: 0 auto;
+}
+
+thead {
+    border-bottom: 0.5pt solid;
+    font-family: var(--table-title-font);
+}
+
+table tr td {
+    padding: 0px .5rem;
+}
+
+table tr th{
+    padding: 0px .5rem;
+}
+table tr th>span>span{
+    width: 120%;
+}
+
+
+/* ==== 列表 ==== */
+
+ul {
+    list-style: disc;
+}
+ul ul {
+    list-style: circle;
+}
+ul ul ul {
+    list-style: square;
+}
+ol {
+    list-style: decimal;
+}
+ol ol {
+    list-style: upper-alpha;
+}
+ol ol ol {
+    list-style: lower-alpha;
+}
+
+/* 這個地雷浪費了我一個晚上，主要是加入這個屬性之前，
+在編輯頁面雖然看起來正常，但是輸出 PDF/HTML 都會丟失 margin。
+大原則：請優先使用父元素的 padding/margin 屬性。
+*/
+#write li {
+    position: relative;
+    margin: .5rem 0;
+}
+
+/* 原生的 Task list 在中文排版上有不少問題：
+1. 無視 Custom font size，一律 inherit = 13px；
+2. 上下位置對齊很差，原生是 calc(1rem-10px)。
+這邊針對這兩點做了優化，嘗試看看會不會發生新的問題。
+*/
+#write input[type=checkbox] {
+    width: .7rem;
+    height: .7rem;
+}
+.md-task-list-item>input {
+    margin-top: .35rem;
+}
+
+
+/* ==== Inline Elements ==== */
+
+/* 避免像是 highlight 或者 inline code 之類的被換行
+*/
+mark, code, del, sub, sup {
+    white-space: nowrap;
+}
+
+/* 有背景的東西需要針對中文字做一些螢幕呈現的微調；
+用於實際影印的文件時，請謹慎地做這些使用
+*/
+mark, code {
+    font-weight: 600; /* 為解決中文字放在 Inline-code 的不協調 */
+    font-size: .8rem; /* 等寬字體都會有點太大... */
+    padding: .3rem .15rem 0rem .15rem; /* 上方填補是為了調整中英混排上的瑕疵 */
+    border-radius: .3rem; /* 填色圓角矩形化 */
+}
+
+a, .md-def-url {
+    color: var(--anchor-color);
+}
+mark {
+	background: var(--mark-color);
+}
+
+code {
+    color: var(--anchor-color);
+    font-family: var(--code-font);
+    background-color: var(--ui-color);
+    /*box-shadow: 0 0 1px 1px var(--quote-color);*/
+}
+
+.md-comment {
+    font-family: var(--quote-font);
+    color: var(--anchor-color);
+    font-size: .8rem;
+}
+
+sup.md-footnote {
+    font-family: var(--quote-font);
+    background-color: var(--bg-color);
+}
+
+/* ==== 標題自動編號系統 ==== */
+#write {
+    counter-reset: h2 0 h3 0 h4 0 h5 0 h6 0;
+}
+
+#write h1 {
+    counter-reset: h2;
+}
+h2 {
+    counter-reset: h3;
+}
+h3 {
+    counter-reset: h4;
+}
+h4 {
+    counter-reset: h5;
+}
+h5 {
+    counter-reset: h6;
+}
+
+#write h2:before {
+    display: var(--h2-show-enum);
+    counter-increment: h2;
+    content: counter(h2);
+    margin-right: 2rem;
+}
+/** override the default style for focused headings */
+#write h3:before,
+h3.md-focus.md-heading:before {
+    display: var(--h3-show-enum);
+    counter-increment: h3;
+    content: counter(h2) "."counter(h3);
+    margin-right: 2rem;
+}
+#write h4:before,
+h4.md-focus.md-heading:before {
+    display: var(--h4-show-enum);
+    counter-increment: h4;
+    content: counter(h2) "."counter(h3) "."counter(h4);
+    margin-right: 2rem;
+}
+#write h5:before,
+h5.md-focus.md-heading:before {
+    display: var(--h5-show-enum);
+    counter-increment: h5;
+    content: counter(h2) "."counter(h3) "."counter(h4) "."counter(h5);
+    margin-right: 2rem;
+}
+#write h6:before,
+h6.md-focus.md-heading:before {
+    display: var(--h6-show-enum);
+    counter-increment: h6;
+    content: counter(h2) "."counter(h3) "."counter(h4) "."counter(h5) "."counter(h6);
+    margin-right: 2rem;
+}
+
+#write h2:before, 
+#write h3:before, 
+#write h4:before, 
+#write h5:before, 
+#write h6:before {
+    color: var(--numbering-color);
+}
+
+/* ==== 目錄 ==== */
+.md-toc-content {
+    margin: 1rem 2rem;
+    padding: 1rem;
+    border-radius: 1rem;
+    /*background-color: var(--ui-color);
+    box-shadow: 0 0 1px 1px var(--quote-color);
+    */
+    counter-reset: toc-h2 toc-h3 toc-h4 toc-h5 toc-h6;
+}
+.md-toc-item {
+    color: var(--anchor-color); /* 要放在這裡才改的到自動計數 */
+}
+
+.md-toc-h2,
+.md-toc-h3,
+.md-toc-h4,
+.md-toc-h5,
+.md-toc-h6 {
+    font-size: 1rem;
+    font-family: var(--toc-font);
+}
+.md-toc-h2 {
+    font-weight: bold;
+}
+
+/* ==== 目錄自動計數 ==== */
+.md-toc-inner {
+    margin-left: 0 !important; /* 基本上是 base.css 給 TOC 的標題 2rem 的邊界所以要為了計數清掉 */
+}
+.md-toc-content .md-toc-h1 {
+    display: var(--toc-show-title);
+    counter-reset: toc-h2;
+}
+.md-toc-content .md-toc-h2 {
+    counter-reset: toc-h3;
+}
+.md-toc-content .md-toc-h3 {
+    counter-reset: toc-h4;
+}
+.md-toc-content .md-toc-h4 {
+    counter-reset: toc-h5;
+}
+.md-toc-content .md-toc-h5 {
+    counter-reset: toc-h6;
+}
+span.md-toc-item.md-toc-h2:before {
+    display: var(--h2-show-enum);
+    counter-increment: toc-h2;
+    content: counter(toc-h2);
+    margin-right: 1rem;
+    font-weight: bold;
+}
+span.md-toc-item.md-toc-h3:before {
+    display: var(--h3-show-enum);
+    counter-increment: toc-h3;
+    content: counter(toc-h2) "."counter(toc-h3);
+    margin-left: 1.5rem;
+    margin-right: 0.5rem;
+}
+span.md-toc-item.md-toc-h4:before {
+    display: var(--h4-show-enum);
+    counter-increment: toc-h4;
+    content: counter(toc-h2) "."counter(toc-h3) "."counter(toc-h4);
+    margin-left: 3.5rem;
+    margin-right: 0.5rem;
+}
+span.md-toc-item.md-toc-h5:before {
+    display: var(--h5-show-enum);
+    counter-increment: toc-h5;
+    content: counter(toc-h2) "."counter(toc-h3) "."counter(toc-h4) "."counter(toc-h5);
+    margin-left: 5.5rem;
+    margin-right: 0.5rem;
+}
+span.md-toc-item.md-toc-h6:before {
+    display: var(--h6-show-enum);
+    counter-increment: toc-h6;
+    content: counter(toc-h2) "."counter(toc-h3) "."counter(toc-h4) "."counter(toc-h5) "."counter(toc-h6);
+    margin-left: 7.5rem;
+    margin-right: 0.5rem;
+}
+.md-toc-content .md-toc-h5, 
+.md-toc-content .md-toc-h6, 
+.md-toc-content .md-toc-h5:before, 
+.md-toc-content .md-toc-h6:before {
+    display: var(--toc-show-h5h6);
+}
+
+
+/* ==== 左側大綱列自動計數 ==== */
+.sidebar-content {
+    font-family: var(--ui-font);
+    font-weight: normal;
+    list-style: none;
+}
+.sidebar-content .outline-h1 {
+    counter-reset: outline-h2;
+}
+.sidebar-content .outline-h2 {
+    counter-reset: outline-h3;
+}
+.sidebar-content .outline-h3 {
+    counter-reset: outline-h4;
+}
+.sidebar-content .outline-h4 {
+    counter-reset: outline-h5;
+}
+.sidebar-content .outline-h5 {
+    counter-reset: outline-h6;
+}
+.sidebar-content .outline-h2 .outline-label {
+    font-weight: bold;
+}
+.sidebar-content .outline-h2 .outline-label:before {
+    display: var(--h2-show-enum);
+    counter-increment: outline-h2;
+    content: counter(outline-h2);
+    margin: .7rem;
+}
+.sidebar-content .outline-h3 .outline-label:before {
+    display: var(--h3-show-enum);
+    counter-increment: outline-h3;
+    content: counter(outline-h2) "."counter(outline-h3);
+    margin: .7rem;
+}
+.sidebar-content .outline-h4 .outline-label:before {
+    display: var(--h4-show-enum);
+    counter-increment: outline-h4;
+    content: counter(outline-h2) "."counter(outline-h3) "."counter(outline-h4);
+    margin: .7rem;
+}
+.sidebar-content .outline-h5 .outline-label:before {
+    display: var(--h5-show-enum);
+    counter-increment: outline-h5;
+    content: counter(outline-h2) "."counter(outline-h3) "."counter(outline-h4) "."counter(outline-h5);
+    margin: .7rem;
+}
+.sidebar-content .outline-h6 .outline-label:before {
+    display: var(--h6-show-enum);
+    counter-increment: outline-h6;
+    content: counter(outline-h2) "."counter(outline-h3) "."counter(outline-h4) "."counter(outline-h5) "."counter(outline-h6);
+    margin: .7rem;
+}
+
+
+/* ==== 專注模式 ==== */
+
+/* 這些新增的元件要手動去焦點化
+*/
+.on-focus-mode #write *:before,
+.on-focus-mode .md-toc-content span.md-toc-item:before {
+    color: #c8c8c8; /* Unfocus color */
+}
+
+/* Override the default style for focused headings.
+*/
+#write .md-focus:before, /* 就算在 Focus mode 以外也會遇到被吃掉的問題 lol */
+.on-focus-mode .md-focus .md-toc-content span.md-toc-item:before {
+    color: inherit !important;
+    border: inherit;
+    border-radius: inherit;
+    position: inherit;
+    left: initial;
+    float: none;
+    top: initial;
+    font-size: inherit;
+    padding-left: inherit;
+    padding-right: inherit;
+    vertical-align: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+}
+
+/* ==== h2跳過系統 ==== */
+/* 有些人寫 Markdown 的習慣是跳過 h2 直接用 h3，只好特別寫一個模組處理這件事情
+*/
+/*
+#write h2:before, 
+span.md-toc-item.md-toc-h2:before, 
+.sidebar-content .outline-h2 .outline-label:before{
+    content: none;   
+}
+#write h3:before, 
+h3.md-focus.md-heading:before{
+    content: counter(h3);
+}
+#write h4:before, 
+h4.md-focus.md-heading:before{
+    content: counter(h3) "."counter(h4);
+}
+#write h5:before, 
+h5.md-focus.md-heading:before{
+    content: counter(h3) "."counter(h4) "."counter(h5);
+}
+#write h6:before, 
+h6.md-focus.md-heading:before{
+    content: counter(h3) "."counter(h4) "."counter(h5) "."counter(h6);
+}
+span.md-toc-item.md-toc-h3:before{
+    content: counter(toc-h3);
+}
+span.md-toc-item.md-toc-h4:before{
+    content: counter(toc-h3) "."counter(toc-h4);
+}
+span.md-toc-item.md-toc-h5:before{
+    content: counter(toc-h3) "."counter(toc-h4) "."counter(toc-h5);
+}
+span.md-toc-item.md-toc-h6:before{
+    content: counter(toc-h3) "."counter(toc-h4) "."counter(toc-h5) "."counter(toc-h6);
+}
+.sidebar-content .outline-h3 .outline-label:before{
+    content: counter(outline-h3);
+}
+.sidebar-content .outline-h3 .outline-label:before{
+    content: counter(outline-h3) "."counter(outline-h4);
+}
+.sidebar-content .outline-h3 .outline-label:before{
+    content: counter(outline-h3) "."counter(outline-h4) "."counter(outline-h5);
+}
+.sidebar-content .outline-h3 .outline-label:before{
+    content: counter(outline-h3) "."counter(outline-h4) "."counter(outline-h5) "."counter(outline-h6);
+}
+*/
